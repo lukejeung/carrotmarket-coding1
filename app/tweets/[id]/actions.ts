@@ -61,7 +61,46 @@ export async function createResponse(tweetId: string, content: string) {
   });
 }
 
-export async function getResponses(tweetId: string) {
+export async function addResponse({
+  formData,
+  tweetId,
+}: {
+  formData: FormData;
+  tweetId: number;
+}) {
+  // await new Promise((r) => setTimeout(r, 4000));
+
+  const data = {
+    response: formData.get("response"),
+  };
+  const result = await responseSchema.safeParse(data);
+
+  if (!result.success) {
+    return result.error.flatten();
+  } else {
+    const session = await getSession();
+    if (session.id) {
+      await db.response.create({
+        data: {
+          response: result.data.response,
+          user: {
+            connect: {
+              id: session.id,
+            },
+          },
+          tweet: {
+            connect: {
+              id: tweetId,
+            },
+          },
+        },
+      });
+      revalidatePath(`/tweets/${tweetId}`);
+    }
+  }
+}
+
+export async function getNewResponse(tweetId: string) {
   return db.response.findMany({
     where: {
       tweetId: Number(tweetId),
@@ -76,6 +115,30 @@ export async function getResponses(tweetId: string) {
     },
     orderBy: { createdAt: "desc" },
   });
+}
+
+export async function getMoreResponses(tweetId: number, cursorId: number) {
+  const responses = await db.response.findMany({
+    where: {
+      tweetId,
+    },
+    select: {
+      id: true,
+      response: true,
+      user: {
+        select: {
+          username: true,
+        },
+      },
+    },
+    cursor: { id: cursorId },
+    skip: cursorId ? 1 : 0,
+    take: 2,
+    orderBy: {
+      created_at: "desc",
+    },
+  });
+  return responses;
 }
 
 export async function likeTweet(tweetId: number) {
@@ -110,4 +173,13 @@ export async function dislikeTweet(tweetId: number) {
   } catch (e) {
     console.log(e);
   }
+}
+
+export async function deleteTweet(tweetId: number) {
+  await db.tweet.delete({
+    where: {
+      id: tweetId,
+    },
+  });
+  redirect("/");
 }
