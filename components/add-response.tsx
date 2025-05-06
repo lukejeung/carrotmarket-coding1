@@ -35,6 +35,7 @@ export default function AddResponse({
 
   const [state, reducerFn] = useOptimistic(
     responses,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (currentState, newResponse: any) => {
       return [newResponse, ...currentState];
     }
@@ -64,6 +65,7 @@ export default function AddResponse({
     } else {
       setErrors([]);
       const newResponse = await getNewResponse(tweetId);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       setResponses((prev: any) => [newResponse, ...prev]);
     }
 

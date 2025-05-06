@@ -71,7 +71,7 @@ const formSchema = z
     message: "Both passwords should be the same!",
     path: ["confirm_password"],
   });
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function createAccount(prevState: any, formData: FormData) {
   const data = {
     username: formData.get("username"),

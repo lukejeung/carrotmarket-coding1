@@ -54,6 +54,7 @@ const formSchema = z
   });
 
 export async function logIn(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   prevState: any,
   formData: FormData
 ): Promise<LoginResponse> {

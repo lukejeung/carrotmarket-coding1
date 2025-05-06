@@ -48,7 +48,7 @@ export async function getTotalPages() {
   const totalTweets = await db.tweet.count();
   return Math.ceil(totalTweets / TWEETS_PER_PAGE);
 }
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function createTweet(prevState: any, formData: FormData) {
   const tweet = formData.get("tweet");
   const session = await getSession();

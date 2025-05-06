@@ -18,11 +18,10 @@ async function getUser() {
   notFound();
 }
 export default async function UserEditPage({
-  params,
+  
 }: {
   params: Promise<{ username: string }>;
 }) {
-  const { username } = await params;
 
   const user = await getUser();
   const logOut = async () => {
