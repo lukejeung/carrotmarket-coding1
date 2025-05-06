@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, MouseEvent } from "react";
+import { useState } from "react";
 
 interface ButtonProps {
   text: string;
@@ -10,7 +10,7 @@ interface ButtonProps {
 export default function Button({ text, onClick }: ButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleClick = async (_e: MouseEvent<HTMLButtonElement>) => {
+  const handleClick = async () => {
     if (onClick) {
       setIsLoading(true);
       await onClick();
