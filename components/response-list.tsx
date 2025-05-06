@@ -1,6 +1,6 @@
 "use client";
 
-import { getResponses } from "@/app/tweets/[id]/actions";
+import { getNewResponse } from "@/app/tweets/[id]/actions";
 import { useEffect, useState } from "react";
 import ResponseForm from "./response-form";
 
@@ -24,7 +24,7 @@ export default function ResponseList({
 
  useEffect(() => {
    const loadResponses = async () => {
-     const responses = await getResponses(tweetId);
+     const responses = await getNewResponse(tweetId);
      const formattedResponses = responses.map((response) => ({
        ...response,
        id: response.id.toString(),
