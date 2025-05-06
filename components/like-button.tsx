@@ -36,7 +36,7 @@ export default function LikeButton({
       } else {
         await likeTweet(tweetId);
       }
-    } catch (error) {
+    } catch (_error) {
       // 에러 발생시 원래 상태로 복구
       setState({
         isLiked: initialIsLiked,

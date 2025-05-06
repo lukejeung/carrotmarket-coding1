@@ -10,7 +10,7 @@ interface ButtonProps {
 export default function Button({ text, onClick }: ButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleClick = async (e: MouseEvent<HTMLButtonElement>) => {
+  const handleClick = async (_e: MouseEvent<HTMLButtonElement>) => {
     if (onClick) {
       setIsLoading(true);
       await onClick();
