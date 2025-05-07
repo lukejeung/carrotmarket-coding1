@@ -26,7 +26,7 @@ export default function SearchPage() {
     tweet: tweet.tweet,
     created_at: tweet.created_at,
     user: {
-      id: tweet.user.user_no, // 매핑
+      user_no: tweet.user.user_no, // 매핑
       username: tweet.user.username,
     },
   }));
