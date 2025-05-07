@@ -6,7 +6,7 @@ import getSession from "@/lib/session";
 import { z } from "zod";
 
 interface User {
-  id: number;
+  user_no: number;
   username: string;
 }
 
@@ -67,7 +67,7 @@ export async function createTweet(prevState: any, formData: FormData) {
         },
       });
 
-      return { success: true, tweetId: newTweet.userNo };
+      return { success: true, tweetId: newTweet.tweet_no };
     } catch (error) {
       if (error instanceof z.ZodError) {
         return { error: error.errors[0].message };
