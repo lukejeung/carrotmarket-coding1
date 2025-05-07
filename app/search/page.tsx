@@ -21,8 +21,18 @@ export default function SearchPage() {
       setError(results.error);
       setTweets([]);
     } else if (results.tweets) {
-      setTweets(results.tweets);
+      const mappedTweets: ITweet[] = results.tweets.map((tweet) => ({
+        id: tweet.tweet_no, // 매핑
+        tweet: tweet.tweet,
+        created_at: tweet.created_at,
+        user: {
+          id: tweet.user.user_no, // 매핑
+          username: tweet.user.username,
+        },
+      }));
+      setTweets(mappedTweets);
       setError(null);
+    }
     }
   };
 
