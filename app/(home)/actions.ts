@@ -13,7 +13,7 @@ interface User {
 export interface ITweet {
   id: number;
   tweet: string;
-  createdAt: Date;
+  created_at: Date;
   user: User;
 }
 
@@ -29,7 +29,7 @@ export async function getTweets(currentPage: number): Promise<ITweet[]> {
     skip: (currentPage - 1) * TWEETS_PER_PAGE,
     take: TWEETS_PER_PAGE,
     orderBy: {
-      createdAt: "desc",
+      created_at: "desc",
     },
     include: {
       user: {
