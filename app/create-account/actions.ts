@@ -35,7 +35,7 @@ const formSchema = z
         username,
       },
       select: {
-        id: true,
+        user_no: true,
       },
     });
     if (user) {
@@ -54,7 +54,7 @@ const formSchema = z
         email,
       },
       select: {
-        id: true,
+        user_no: true,
       },
     });
     if (user) {
@@ -96,11 +96,11 @@ export async function createAccount(prevState: any, formData: FormData) {
         password: hashedPassword,
       },
       select: {
-        id: true,
+        user_no: true,
       },
     });
     const session = await getSession();
-    session.id = user.id;
+    session.id = user.user_no;
     await session.save();
     redirect("/profile");
   }
