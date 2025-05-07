@@ -41,7 +41,15 @@ export async function getTweets(currentPage: number): Promise<ITweet[]> {
     },
   });
 
-  return tweets;
+  return tweets.map((tweet) => ({
+    id: tweet.tweet_no,
+    tweet: tweet.tweet,
+    created_at: tweet.created_at,
+    user: {
+      id: tweet.user.user_no,
+      username: tweet.user.username,
+    },
+  }));
 }
 
 export async function getTotalPages() {
