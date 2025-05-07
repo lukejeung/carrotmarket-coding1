@@ -96,7 +96,7 @@ export default async function TweetDetail({
           </p>
           <p>
             <span className="font-semibold">작성일:</span>{" "}
-            {tweetDetail.createdAt.toLocaleDateString("ko-KR")}
+            {tweetDetail.created_at.toLocaleDateString("ko-KR")}
           </p>
         </div>
         <LikeButton
