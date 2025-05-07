@@ -34,7 +34,7 @@ export async function getTweets(currentPage: number): Promise<ITweet[]> {
     include: {
       user: {
         select: {
-          id: true,
+          user_no: true,
           username: true,
         },
       },
@@ -61,13 +61,13 @@ export async function createTweet(prevState: any, formData: FormData) {
           tweet: validatedData.tweet,
           user: {
             connect: {
-              id: session.id,
+              user_no: session.id,
             },
           },
         },
       });
 
-      return { success: true, tweetId: newTweet.id };
+      return { success: true, tweetId: newTweet.userNo };
     } catch (error) {
       if (error instanceof z.ZodError) {
         return { error: error.errors[0].message };
