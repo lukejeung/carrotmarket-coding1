@@ -21,7 +21,15 @@ export async function getTweetDetail(id: string): Promise<ITweet> {
 
   if (!tweet) throw new Error("Tweet not found");
 
-  return tweet;
+  return {
+    id: tweet.tweet_no, // ✅ 여기를 매핑
+    tweet: tweet.tweet,
+    created_at: tweet.created_at,
+    user: {
+      user_no: tweet.user.user_no, // ✅ 여기도 매핑
+      username: tweet.user.username,
+    },
+  };
 }
 
 export async function getUserName(user_no: number) {
