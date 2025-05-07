@@ -18,12 +18,12 @@ export async function searchTweets(query: string) {
         },
       },
       orderBy: {
-        createdAt: "desc",
+        created_at: "desc",
       },
       include: {
         user: {
           select: {
-            id: true,
+            user_no: true,
             username: true,
           },
         },

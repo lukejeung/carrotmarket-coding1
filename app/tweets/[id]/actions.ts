@@ -8,11 +8,11 @@ import { z } from "zod";
 
 export async function getTweetDetail(id: string): Promise<ITweet> {
   const tweet = await db.tweet.findUnique({
-    where: { id: Number(id) },
+    where: { tweet_no: Number(id) },
     include: {
       user: {
         select: {
-          id: true,
+          user_no: true,
           username: true,
         },
       },
@@ -24,9 +24,9 @@ export async function getTweetDetail(id: string): Promise<ITweet> {
   return tweet;
 }
 
-export async function getUserName(id: number) {
+export async function getUserName(user_no: number) {
   const user = await db.user.findUnique({
-    where: { id },
+    where: { user_no },
     select: { username: true },
   });
   return user?.username;
@@ -85,7 +85,7 @@ export async function addResponse({
           response: result.data.response,
           user: {
             connect: {
-              id: session.id,
+              user_no: session.id,
             },
           },
           tweet: {
@@ -108,12 +108,12 @@ export async function getNewResponse(tweetId: string) {
     include: {
       user: {
         select: {
-          id: true,
+          user_no: true,
           username: true,
         },
       },
     },
-    orderBy: { createdAt: "desc" },
+    orderBy: { created_at: "desc" },
   });
 }
 
@@ -178,7 +178,7 @@ export async function dislikeTweet(tweetId: number) {
 export async function deleteTweet(tweetId: number) {
   await db.tweet.delete({
     where: {
-      id: tweetId,
+      tweet_no: tweetId,
     },
   });
   redirect("/");

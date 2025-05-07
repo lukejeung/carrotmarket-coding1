@@ -39,11 +39,11 @@ const formSchema = z
       where: {
         username,
         NOT: {
-          id: Number(id),
+          user_no: Number(id),
         },
       },
       select: {
-        id: true,
+        user_no: true,
       },
     });
     if (user) {
@@ -61,11 +61,11 @@ const formSchema = z
       where: {
         email,
         NOT: {
-          id: Number(id),
+          user_no: Number(id),
         },
       },
       select: {
-        id: true,
+        user_no: true,
       },
     });
     if (user) {
@@ -138,10 +138,10 @@ export async function updateProfile(
     }
 
     const updatedUser = await db.user.update({
-      where: { id: Number(data.id) },
+      where: { user_no: Number(data.id) },
       data: updateData,
       select: {
-        id: true,
+        user_no: true,
         email: true,
         username: true,
         bio: true,

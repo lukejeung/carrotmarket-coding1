@@ -6,10 +6,10 @@ export async function getUserProfile(username: string) {
   const profile = await db.user.findUnique({
     where: { username },
     select: {
-      id: true,
+      user_no: true,
       username: true,
       bio: true,
-      createdAt: true,
+      created_dt: true,
     },
   });
 
@@ -22,7 +22,7 @@ export async function getUserTweets(username: string) {
     include: {
       user: true,
     },
-    orderBy: { createdAt: "desc" },
+    orderBy: { created_at: "desc" },
   });
   return tweets;
 }

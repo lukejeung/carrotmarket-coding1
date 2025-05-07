@@ -39,7 +39,7 @@ const formSchema = z
         email,
       },
       select: {
-        id: true,
+        user_no: true,
       },
     });
     if (!user) {
@@ -81,7 +81,7 @@ export async function logIn(
         username: result.data.username,
       },
       select: {
-        id: true,
+        user_no: true,
         password: true,
       },
     });
@@ -91,7 +91,7 @@ export async function logIn(
     );
     if (ok) {
       const session = await getSession();
-      session.id = user!.id;
+      session.id = user!.user_no;
       await session.save();
       redirect("/");
     } else {
