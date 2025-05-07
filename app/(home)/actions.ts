@@ -46,7 +46,7 @@ export async function getTweets(currentPage: number): Promise<ITweet[]> {
     tweet: tweet.tweet,
     created_at: tweet.created_at,
     user: {
-      id: tweet.user.user_no,
+      user_no: tweet.user.user_no,
       username: tweet.user.username,
     },
   }));
