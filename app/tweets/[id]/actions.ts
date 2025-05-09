@@ -65,8 +65,16 @@ export async function createResponse(tweetId: string, content: string) {
   return db.response.create({
     data: {
       response_txt: content,
-      userNo: session.id,
-      tweetNo: Number(tweetId),
+      user: {
+        connect: {
+          user_no: session.id,
+        },
+      },
+      tweet: {
+        connect: {
+          tweet_no: Number(tweetId),
+        },
+      },
     },
   });
 }
