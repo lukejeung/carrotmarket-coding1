@@ -24,5 +24,8 @@ export async function getUserTweets(username: string) {
     },
     orderBy: { created_at: "desc" },
   });
-  return tweets;
+  return tweets.map((tweet) => ({
+    ...tweet,
+    id: tweet.tweet_no, // ITweet 타입에 맞추기
+  }));
 }

@@ -2,20 +2,27 @@
 
 import { createResponse } from "@/app/tweets/[id]/actions";
 import { useTransition, useState } from "react";
-import { IResponse } from "./response-list";
+
+// 인터페이스를 명확히 (id에 number | string 허용)
+export interface IResponse {
+  id: number | string;
+  response: string;
+  user: {
+    username: string;
+  };
+  createdAt?: Date;
+}
 
 interface ResponseFormProps {
-  tweetId: string;
+  tweetId: number; // number로 통일
   username: string;
-  lastId?: string;
   addOptimisticResponse: (response: IResponse) => void;
-  removeOptimisticResponse: (id: string) => void;
+  removeOptimisticResponse: (id: number | string) => void;
 }
 
 export default function ResponseForm({
   tweetId,
   username,
-  lastId,
   addOptimisticResponse,
   removeOptimisticResponse,
 }: ResponseFormProps) {
@@ -25,17 +32,16 @@ export default function ResponseForm({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
+
     const form = e.currentTarget;
     const formData = new FormData(form);
     const responseText = formData.get("response") as string;
 
-    const optimisticId = String(Number(lastId) + 1);
+    const optimisticId = `temp-${Date.now()}`; // 고유한 문자열 ID 사용
     const optimisticResponse = {
       id: optimisticId,
       response: responseText,
-      user: {
-        username: username,
-      },
+      user: { username },
       createdAt: new Date(),
     };
 
@@ -61,9 +67,7 @@ export default function ResponseForm({
         placeholder="답글을 입력하세요..."
         minLength={1}
         maxLength={280}
-        className={`w-full p-2 border rounded mb-2 ${
-          error ? "border-red-500" : ""
-        }`}
+        className={`w-full p-2 border rounded mb-2 ${error ? "border-red-500" : ""}`}
         required
       />
       {error && <div className="text-red-500 text-sm mb-2">{error}</div>}

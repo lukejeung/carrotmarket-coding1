@@ -42,7 +42,7 @@ export default function Profile({
    bio: user.bio as FormDataEntryValue,
    password: null,
    confirm_password: null,
-   id: user.id.toString() as FormDataEntryValue,
+   id: user.user_no.toString() as FormDataEntryValue,
  });
 
  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -181,7 +181,7 @@ export default function Profile({
            </p>
            <p>
              <span className="font-medium">가입일:</span>{" "}
-             {user.createdAt.toLocaleDateString()}
+             {user.created_dt.toLocaleDateString()}
            </p>
            <p>
              <span className="font-medium">자기소개:</span>{" "}

@@ -10,15 +10,15 @@ import LikeButton from "@/components/like-button";
 async function getLikeStatus(tweetId: number, userId: number) {
   const isLiked = await db.like.findUnique({
     where: {
-      userId_tweetId: {
-        tweetId,
-        userId,
+      userNo_tweetNo: {
+        tweetNo: tweetId,
+        userNo: userId,
       },
     },
   });
   const likeCount = await db.like.count({
     where: {
-      tweetId,
+      tweetNo: tweetId,
     },
   });
   return {
@@ -38,7 +38,7 @@ async function getCachedLikeStatus(tweetId: number) {
 
 // 새로고침 동작
 async function revalidateTweet(id: string) {
-  "use server"; // 서버에서 실행
+  "use server";
   revalidatePath(`/tweets/${id}`);
 }
 
@@ -59,10 +59,10 @@ export default async function TweetDetail({
   }
 
   const tweetDetail = await getTweetDetail(id);
+  const { responses, user } = tweetDetail;
   const username = await getUserName(session.id);
   const { likeCount, isLiked } = await getCachedLikeStatus(Number(id));
 
-  // 새로고침 버튼 이벤트 핸들러
   const handleRevalidate = async () => {
     await revalidateTweet(id);
   };
@@ -72,7 +72,6 @@ export default async function TweetDetail({
       <div className="p-6 bg-white rounded-xl shadow-md">
         <div className="flex justify-between items-center mb-4 *:text-blue-500">
           <Link href="/?page=1">← 목록으로 돌아가기</Link>
-          {/* 버튼 클릭 이벤트로 새로고침 처리 */}
           <button
             type="button"
             onClick={handleRevalidate}
@@ -89,9 +88,9 @@ export default async function TweetDetail({
             <span className="font-semibold">작성자:</span>{" "}
             <Link
               className="text-blue-500 font-semibold"
-              href={`/users/${tweetDetail.user.username}`}
+              href={`/users/${user.username}`}
             >
-              {tweetDetail.user.username}
+              {user.username}
             </Link>
           </p>
           <p>
@@ -107,7 +106,11 @@ export default async function TweetDetail({
       </div>
       <div className="p-6 mt-8 border-t pt-6">
         <h2 className="text-xl font-bold mb-4">답글</h2>
-        <ResponseList tweetId={id} username={username!} />
+        <ResponseList
+          tweetId={Number(id)}
+          username={username!}
+          responses={responses}
+        />
       </div>
     </div>
   );

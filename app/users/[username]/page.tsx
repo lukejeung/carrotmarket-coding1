@@ -30,7 +30,7 @@ export default async function UserProfilePage({
     notFound();
   }
 
-  const isOwner = session?.id === profile?.id;
+  const isOwner = session?.id === profile?.user_no;
 
   return (
     <div className="p-6">
@@ -51,7 +51,7 @@ export default async function UserProfilePage({
           <p className="text-gray-600">@{profile.username}</p>
           {profile.bio && <p className="mt-2">{profile.bio}</p>}
           <p className="text-gray-600 text-sm mt-2">
-            가입일: {new Date(profile.createdAt).toLocaleDateString()}
+            가입일: {new Date(profile.created_dt).toLocaleDateString()}
           </p>
           {isOwner && (
             <Link
@@ -66,7 +66,7 @@ export default async function UserProfilePage({
       <div className="border-b border-gray-300 mb-4" />
       <div className="space-y-4">
         {tweets.map((tweet) => (
-          <TweetCard key={tweet.id} tweet={tweet} />
+          <TweetCard key={tweet.tweet_no} tweet={tweet} />
         ))}
       </div>
     </div>

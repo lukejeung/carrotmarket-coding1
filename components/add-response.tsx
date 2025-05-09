@@ -58,9 +58,9 @@ export default function AddResponse({
     });
 
     const result = await addResponse({ formData, tweetId });
-    const errors = result?.fieldErrors.response;
+    const errors = result?.fieldErrors?.response ?? [];
 
-    if (errors) {
+    if (errors.length > 0) {
       setErrors(errors);
     } else {
       setErrors([]);
@@ -104,7 +104,11 @@ export default function AddResponse({
         ))}
         <FormBtn text="Post Response" />
       </form>
-      <ResponseList responses={state} />
+      <ResponseList
+  tweetId={tweetId}
+  username={username}
+  responses={state}
+/>
       {isLastResponse || responses.length >= totalResponses ? null : (
         <button
           onClick={onLoadMoreResponsesClick}

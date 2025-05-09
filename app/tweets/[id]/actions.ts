@@ -3,12 +3,14 @@
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { ITweet } from "@/app/(home)/actions";
+import { IResponse } from "@/components/response-form";
 import db from "@/lib/db";
 import getSession from "@/lib/session";
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
+import { ZodError } from "zod";
 
-export async function getTweetDetail(id: string): Promise<ITweet> {
+export async function getTweetDetail(id: string): Promise<ITweet & { responses: IResponse[] }> {
   const tweet = await db.tweet.findUnique({
     where: { tweet_no: Number(id) },
     include: {
@@ -18,19 +20,39 @@ export async function getTweetDetail(id: string): Promise<ITweet> {
           username: true,
         },
       },
+      responses: {
+        select: {
+          id: true,
+          response_txt: true,
+          created_at: true,
+          user: {
+            select: {
+              username: true,
+            },
+          },
+        },
+      },
     },
   });
 
   if (!tweet) throw new Error("Tweet not found");
 
   return {
-    id: tweet.tweet_no, // ✅ 여기를 매핑
+    id: tweet.tweet_no,
     tweet: tweet.tweet,
     created_at: tweet.created_at,
     user: {
-      user_no: tweet.user.user_no, // ✅ 여기도 매핑
-      username: tweet.user.username,
+      user_no: tweet.user!.user_no,
+      username: tweet.user!.username,
     },
+    responses: tweet.responses!.map((res) => ({
+      id: res.id,
+      response: res.response_txt,
+      createdAt: res.created_at,
+      user: {
+        username: res.user.username,
+      },
+    })),
   };
 }
 
@@ -43,10 +65,10 @@ export async function getUserName(user_no: number) {
 }
 
 const responseSchema = z.object({
-  content: z.string().min(1).max(280),
+  response: z.string().min(1).max(280),
 });
 
-export async function createResponse(tweetId: string, content: string) {
+export async function createResponse(tweetId: number, content: string) {
   const validation = responseSchema.safeParse({ content });
 
   if (!validation.success) {
@@ -85,58 +107,77 @@ export async function addResponse({
 }: {
   formData: FormData;
   tweetId: number;
-}) {
-  // await new Promise((r) => setTimeout(r, 4000));
-
+}): Promise<
+  | {
+      fieldErrors?: {
+        response?: string[];
+      };
+    }
+  | null
+> {
   const data = {
     response: formData.get("response"),
   };
-  const result = await responseSchema.safeParse(data);
+  const result = responseSchema.safeParse(data);
 
   if (!result.success) {
-    return result.error.flatten();
-  } else {
-    const session = await getSession();
-    if (session.id) {
-      await db.response.create({
-        data: {
-          response_txt: result.data.content,
-          user: {
-            connect: {
-              user_no: session.id,
-            },
-          },
-          tweet: {
-            connect: {
-              tweet_no: tweetId,
-            },
+    return {
+  fieldErrors: (result.error as ZodError).flatten().fieldErrors,
+};
+  }
+
+  const session = await getSession();
+  if (session.id) {
+    await db.response.create({
+      data: {
+        response_txt: result.data.response, // ✅ 수정됨
+        user: {
+          connect: {
+            user_no: session.id,
           },
         },
-      });
-      revalidatePath(`/tweets/${tweetId}`);
-    }
+        tweet: {
+          connect: {
+            tweet_no: tweetId,
+          },
+        },
+      },
+    });
+    revalidatePath(`/tweets/${tweetId}`);
   }
+
+  return null; // ✅ 성공 시 명시적으로 null 반환
 }
 
-export async function getNewResponse(tweetId: string) {
-  return db.response.findMany({
+export async function getNewResponse(tweetId: number) {
+  const [latest] = await db.response.findMany({
     where: {
-      tweetNo: Number(tweetId),
+      tweetNo: tweetId,
     },
     include: {
       user: {
         select: {
-          user_no: true,
           username: true,
         },
       },
     },
     orderBy: { created_at: "desc" },
+    take: 1, // 가장 최신 응답 하나만
   });
+
+  if (!latest) return null;
+
+  return {
+    id: latest.id,
+    response: latest.response_txt, // ✅ 이름 매핑
+    user: {
+      username: latest.user.username,
+    },
+  };
 }
 
 export async function getMoreResponses(tweetId: number, cursorId: number) {
-  const responses = await db.response.findMany({
+  const rawResponses = await db.response.findMany({
     where: {
       tweetNo: tweetId,
     },
@@ -149,19 +190,30 @@ export async function getMoreResponses(tweetId: number, cursorId: number) {
         },
       },
     },
-    cursor: { id: cursorId },
+    cursor: cursorId ? { id: cursorId } : undefined,
     skip: cursorId ? 1 : 0,
     take: 2,
     orderBy: {
       created_at: "desc",
     },
   });
-  return responses;
+
+  // ✅ response_txt → response로 이름 변경
+  return rawResponses.map((r) => ({
+    id: r.id,
+    response: r.response_txt,
+    user: {
+      username: r.user.username,
+    },
+  }));
 }
 
 export async function likeTweet(tweetId: number) {
   await new Promise((r) => setTimeout(r, 1000));
   const session = await getSession();
+  if (!session.id) {
+    throw new Error("로그인이 필요합니다.");
+  }
   try {
     await db.like.create({
       data: {
