@@ -1,5 +1,7 @@
 "use server";
 
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { ITweet } from "@/app/(home)/actions";
 import db from "@/lib/db";
 import getSession from "@/lib/session";
@@ -62,9 +64,9 @@ export async function createResponse(tweetId: string, content: string) {
 
   return db.response.create({
     data: {
-      response: content,
-      userId: session.id,
-      tweetId: Number(tweetId),
+      response_txt: content,
+      userNo: session.id,
+      tweetNo: Number(tweetId),
     },
   });
 }
@@ -90,7 +92,7 @@ export async function addResponse({
     if (session.id) {
       await db.response.create({
         data: {
-          response: result.data.response,
+          response_txt: result.data.content,
           user: {
             connect: {
               user_no: session.id,
@@ -98,7 +100,7 @@ export async function addResponse({
           },
           tweet: {
             connect: {
-              id: tweetId,
+              tweet_no: tweetId,
             },
           },
         },
@@ -111,7 +113,7 @@ export async function addResponse({
 export async function getNewResponse(tweetId: string) {
   return db.response.findMany({
     where: {
-      tweetId: Number(tweetId),
+      tweetNo: Number(tweetId),
     },
     include: {
       user: {
@@ -128,11 +130,11 @@ export async function getNewResponse(tweetId: string) {
 export async function getMoreResponses(tweetId: number, cursorId: number) {
   const responses = await db.response.findMany({
     where: {
-      tweetId,
+      tweetNo: tweetId,
     },
     select: {
       id: true,
-      response: true,
+      response_txt: true,
       user: {
         select: {
           username: true,
@@ -155,8 +157,8 @@ export async function likeTweet(tweetId: number) {
   try {
     await db.like.create({
       data: {
-        tweetId,
-        userId: session.id!,
+        tweetNo: tweetId,      // ✅ 필드명 정확히
+        userNo: session.id,    // ✅ 필드명 정확히
       },
     });
     revalidateTag(`like-status-${tweetId}`);
@@ -171,11 +173,11 @@ export async function dislikeTweet(tweetId: number) {
     const session = await getSession();
     await db.like.delete({
       where: {
-        userId_tweetId: {
-          tweetId,
-          userId: session.id!,
+        userNo_tweetNo: {
+          userNo: session.id!,
+          tweetNo: tweetId,
         },
-      },
+      }
     });
     revalidateTag(`like-status-${tweetId}`);
   } catch (e) {
