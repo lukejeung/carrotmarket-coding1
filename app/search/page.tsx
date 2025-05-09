@@ -1,3 +1,5 @@
+"use client"
+
 import { useState } from "react";
 import { searchTweets } from "./actions";
 import TweetCard from "@/components/tweet-card";

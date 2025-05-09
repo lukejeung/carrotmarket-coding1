@@ -1,3 +1,5 @@
+"use client"
+
 import Button from "@/components/button";
 import Input from "@/components/input";
 import { useRouter } from "next/navigation";
