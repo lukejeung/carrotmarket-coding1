@@ -1,10 +1,13 @@
-import { Suspense } from "react";
-import SearchComponent from "./search-component";
+import dynamic from "next/dynamic";
+
+const SearchComponent = dynamic(() => import("./search-component"), {
+  ssr: false,
+});
 
 export default function Page() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <div>
       <SearchComponent />
-    </Suspense>
+    </div>
   );
 }
