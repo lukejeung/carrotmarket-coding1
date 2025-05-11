@@ -2,7 +2,6 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { db } from '@/lib/db'
 import GitHubProvider from 'next-auth/providers/github'
 import { type NextAuthOptions, getServerSession } from 'next-auth'
-import NextAuth, { Session } from "next-auth";
 
 // 여기서 `Session` 타입을 확장합니다.
 declare module "next-auth" {
