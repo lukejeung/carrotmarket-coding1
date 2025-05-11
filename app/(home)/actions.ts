@@ -60,7 +60,7 @@ export async function getTotalPages() {
 export async function createTweet(prevState: any, formData: FormData) {
   const tweet = formData.get("tweet");
   const session = await getSession();
-  if (session.id) {
+  if (session && session.id) {
     try {
       const validatedData = tweetSchema.parse({ tweet });
 
@@ -84,4 +84,9 @@ export async function createTweet(prevState: any, formData: FormData) {
     }
   }
   return { error: "로그인이 필요합니다" };
+} else {
+  // session이 없을 때 처리 (선택)
+  return {
+    error: "로그인이 필요합니다.",
+  };
 }
