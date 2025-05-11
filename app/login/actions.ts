@@ -19,6 +19,7 @@ interface LoginResponse {
   message?: string;
   errors?: Record<string, string[]>;
   loggedIn?: boolean;
+  error?: string;
 }
 
 const formSchema = z
