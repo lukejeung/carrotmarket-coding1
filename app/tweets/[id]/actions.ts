@@ -127,7 +127,7 @@ export async function addResponse({
   }
 
   const session = await getSession();
-  if (session.id) {
+  if (session && session.user.id) {
     await db.response.create({
       data: {
         response_txt: result.data.response, // ✅ 수정됨
