@@ -13,9 +13,9 @@ import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
 
 interface LoginResponse {
-  email: FormDataEntryValue | null;
-  username: FormDataEntryValue | null;
-  password: FormDataEntryValue | null;
+  email?: FormDataEntryValue | null;
+  username?: FormDataEntryValue | null;
+  password?: FormDataEntryValue | null;
   message?: string;
   errors?: Record<string, string[]>;
   loggedIn?: boolean;
