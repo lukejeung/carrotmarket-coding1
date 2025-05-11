@@ -88,10 +88,10 @@ const formSchema = z
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function createAccount(formData: FormData): Promise<CreateAccountState> {
   const data = {
-    username: formData.get("username"),
-    email: formData.get("email"),
-    password: formData.get("password"),
-    confirm_password: formData.get("confirm_password"),
+    username: formData.get("username")?.toString() ?? undefined,
+    email: formData.get("email")?.toString() ?? undefined,
+    password: formData.get("password")?.toString() ?? undefined,
+    confirm_password: formData.get("confirm_password")?.toString() ?? undefined,
   };
 
   const result = await formSchema.spa(data);
