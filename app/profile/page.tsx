@@ -22,7 +22,7 @@ export default async function ProfilePage() {
   const user = await getUser();
   const logOut = async () => {
     "use server";
-    const session = await getSession();
+    await getSession();
     redirect("/");
   };
   return <Profile user={user} logOut={logOut} enableEdit={false} />;
