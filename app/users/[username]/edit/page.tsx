@@ -1,6 +1,6 @@
 import Profile from "@/components/profile";
-import db from "@/lib/db";
-import getSession from "@/lib/session";
+import { db } from "@/lib/db";
+import { getSession } from "@/lib/session";
 import { notFound, redirect } from "next/navigation";
 
 async function getUser() {
