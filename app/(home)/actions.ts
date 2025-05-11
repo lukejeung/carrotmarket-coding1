@@ -60,7 +60,8 @@ export async function getTotalPages() {
 export async function createTweet(prevState: any, formData: FormData) {
   const tweet = formData.get("tweet");
   const session = await getSession();
-  if (session && session.id) {
+
+  if (session?.user?.id) {
     try {
       const validatedData = tweetSchema.parse({ tweet });
 
@@ -69,7 +70,7 @@ export async function createTweet(prevState: any, formData: FormData) {
           tweet: validatedData.tweet,
           user: {
             connect: {
-              user_no: session.id,
+              user_no: session.user.id,
             },
           },
         },
@@ -83,5 +84,6 @@ export async function createTweet(prevState: any, formData: FormData) {
       return { error: "트윗 작성 중 오류가 발생했습니다" };
     }
   }
+
   return { error: "로그인이 필요합니다" };
 }
