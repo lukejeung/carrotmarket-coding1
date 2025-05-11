@@ -29,7 +29,7 @@ async function getLikeStatus(tweetId: number, userId: number) {
 
 async function getCachedLikeStatus(tweetId: number) {
   const session = await getSession();
-  const userId = session.id;
+  const userId = session.user.id;
   const cachedOperation = nextCache(getLikeStatus, ["tweet-like-status"], {
     tags: [`like-status-${tweetId}`],
   });
@@ -50,7 +50,7 @@ export default async function TweetDetail({
   const { id } = await params;
   const session = await getSession();
 
-  if (!session || typeof session.id === "undefined") {
+  if (!session || typeof session.user.id === "undefined") {
     return <div>로그인이 필요합니다</div>;
   }
 
