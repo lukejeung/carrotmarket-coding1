@@ -89,7 +89,7 @@ export async function createResponse(tweetId: number, content: string) {
       response_txt: content,
       user: {
         connect: {
-          user_no: session.user.id,
+          user_no: Number(session.user.id),
         },
       },
       tweet: {
