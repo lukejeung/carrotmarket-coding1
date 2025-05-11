@@ -5,7 +5,7 @@ import Profile from "@/components/profile";
 
 async function getUser() {
   const session = await getSession();
-  if (session.id) {
+  if (session && session.id) {
     const user = await db.user.findUnique({
       where: {
         user_no: session.id,
