@@ -11,6 +11,20 @@ import { z } from "zod";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
 
+export interface CreateAccountState {
+  username?: string;
+  email?: string;
+  password?: string;
+  confirm_password?: string;
+  errors?: {
+    username?: string[];
+    email?: string[];
+    password?: string[];
+    confirm_password?: string[];
+  };
+  error?: string;
+}
+
 const checkPasswords = ({
   password,
   confirm_password,
