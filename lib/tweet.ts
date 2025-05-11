@@ -13,13 +13,13 @@ export async function likeTweet(tweetId: string): Promise<{ liked: boolean }> {
 
   if (existing) {
     await db.like.delete({
-  where: {
-    userNo_tweetNo: {
-      userNo: session.user.id,
-      tweetNo: Number(tweetId),
-    },
-  },
-})
+      where: {
+        userNo_tweetNo: {
+          userNo: session.user.id,
+          tweetNo: Number(tweetId),
+        },
+      },
+    })
     return { liked: false }
   } else {
     await db.like.create({
@@ -38,17 +38,18 @@ interface RespondToTweetInput {
 }
 
 export async function respondToTweet({ tweetId, text }: RespondToTweetInput): Promise<Response> {
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.id) throw new Error('로그인 상태가 아닙니다.');
+  const session = await getServerSession(authOptions)
+  if (!session?.user?.id) throw new Error('로그인 상태가 아닙니다.')
 
   const response = await db.response.create({
     data: {
+      text, // text를 포함하여 데이터에 추가
       userNo: session.user.id,
       tweetNo: Number(tweetId),
     },
-  });
+  })
 
-  return response;
+  return response
 }
 
 interface CreateTweetInput {
@@ -66,3 +67,4 @@ export async function createTweet({ content }: CreateTweetInput): Promise<Tweet>
     },
   })
 }
+
