@@ -32,18 +32,23 @@ export async function likeTweet(tweetId: string): Promise<{ liked: boolean }> {
   }
 }
 
-export async function respondToTweet(tweetId: string): Promise<Response> {
-  const session = await getServerSession(authOptions)
-  if (!session?.user?.id) throw new Error('로그인 상태가 아닙니다.')
+interface RespondToTweetInput {
+  tweetId: string;
+  text: string;
+}
+
+export async function respondToTweet({ tweetId, text }: RespondToTweetInput): Promise<Response> {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) throw new Error('로그인 상태가 아닙니다.');
 
   const response = await db.response.create({
     data: {
       userNo: session.user.id,
       tweetNo: Number(tweetId),
     },
-  })
+  });
 
-  return response
+  return response;
 }
 
 interface CreateTweetInput {
