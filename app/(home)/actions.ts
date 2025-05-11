@@ -70,7 +70,7 @@ export async function createTweet(prevState: any, formData: FormData) {
           tweet: validatedData.tweet,
           user: {
             connect: {
-              user_no: session.user.id,
+              user_no: Number(session.user.id),
             },
           },
         },
