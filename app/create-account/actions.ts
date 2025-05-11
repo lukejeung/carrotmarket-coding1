@@ -98,9 +98,12 @@ export async function createAccount(formData: FormData): Promise<CreateAccountSt
 
   if (!result.success) {
     return {
-      ...data,
-      errors: result.error.flatten().fieldErrors,
-    };
+  username: data.username as string,
+  email: data.email as string,
+  password: data.password as string,
+  confirm_password: data.confirm_password as string,
+  errors: result.error.flatten().fieldErrors,
+};
   }
 
   const hashedPassword = await bcrypt.hash(result.data.password, 12);
@@ -118,7 +121,7 @@ export async function createAccount(formData: FormData): Promise<CreateAccountSt
 
   const session = await getSession();
   if (!session) {
-    return { errors: "세션을 가져올 수 없습니다. 다시 로그인해주세요." };
+    return { error: "세션을 가져올 수 없습니다. 다시 로그인해주세요." };
   }
 
   session.user.id = user.user_no;
