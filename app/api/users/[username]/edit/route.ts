@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { updateProfile } from "@/lib/user";
 import type { NextRequest } from "next/server";
 
-export async function POST(req: NextRequest, context: { params: { username: string } }) {
-  const username = context.params.username;
+export async function POST(req: NextRequest, { params }: { params: { username: string } }) {
+  const tweetId = params.username;
 
   if (!username) {
     return NextResponse.json({ error: "유저 이름이 필요합니다." }, { status: 400 });
