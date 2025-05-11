@@ -27,9 +27,6 @@ export default async function UserEditPage({
   const logOut = async () => {
     "use server";
     const session = await getSession();
-  if (session) {
-    session.destroy();
-  }
     redirect("/");
   };
   return <Profile user={user} logOut={logOut} enableEdit={true} />;
