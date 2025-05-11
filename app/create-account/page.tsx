@@ -25,7 +25,7 @@ export default function CreateAccount() {
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const result = await createAccount(null, formData);
+    const result = await createAccount(formData);
     setState(result);
   }
 
