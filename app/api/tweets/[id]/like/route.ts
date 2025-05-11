@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { likeTweet } from "@/lib/tweet";
 import type { NextRequest } from "next/server";
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
-  const tweetId = params.id;
+export async function POST(req: NextRequest) {
+
   if (!tweetId) {
     return NextResponse.json({ error: "트윗 ID가 필요합니다." }, { status: 400 });
   }
