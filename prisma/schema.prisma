@@ -20,7 +20,7 @@ model User {
   email      String     @unique
   username   String     @unique
   password   String
-  bio        String
+  bio        String     @default("")
   created_dt DateTime   @default(now())
   updated_dt DateTime   @updatedAt
   Tweet      Tweet[]
