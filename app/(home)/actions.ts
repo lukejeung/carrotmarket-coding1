@@ -1,8 +1,8 @@
 "use server";
 
 import { TWEETS_PER_PAGE } from "@/lib/constants";
-import db from "@/lib/db";
-import getSession from "@/lib/session";
+import { db } from "@/lib/db";
+import { getSession } from "@/lib/session";
 import { z } from "zod";
 
 interface User {
