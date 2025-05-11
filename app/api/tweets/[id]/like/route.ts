@@ -2,14 +2,10 @@ import { NextResponse } from "next/server";
 import { likeTweet } from "@/lib/tweet";
 import type { NextRequest } from "next/server";
 
-// 이 타입을 명시적으로 지정해 줍니다
-interface RouteContext {
-  params: {
-    id: string;
-  };
-}
-
-export async function POST(req: NextRequest, context: RouteContext) {
+export async function POST(
+  req: NextRequest,
+  context: { params: { id: string } }
+) {
   const tweetId = context.params.id;
 
   if (!tweetId) {
