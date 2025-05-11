@@ -30,7 +30,7 @@ export default async function UserProfilePage({
     notFound();
   }
 
-  const isOwner = session?.user.id === profile?.user_no;
+  const isOwner = Number(session?.user.id) === profile?.user_no;
 
   return (
     <div className="p-6">
