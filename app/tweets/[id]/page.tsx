@@ -29,6 +29,9 @@ async function getLikeStatus(tweetId: number, userId: number) {
 
 async function getCachedLikeStatus(tweetId: number) {
   const session = await getSession();
+  if (!session) {
+    return null; // 또는 throw new Error("로그인이 필요합니다.");
+  }
   const userId = session.user.id;
   const cachedOperation = nextCache(getLikeStatus, ["tweet-like-status"], {
     tags: [`like-status-${tweetId}`],
