@@ -8,14 +8,14 @@ export async function likeTweet(tweetId: string): Promise<{ liked: boolean }> {
   if (!session?.user?.id) throw new Error('로그인 상태가 아닙니다.')
 
   const existing: Like | null = await db.like.findFirst({
-    where: { tweetNo: Number(tweetId), userNo: session.user.id },
+    where: { tweetNo: Number(tweetId), userNo: Number(session.user.id) },
   })
 
   if (existing) {
     await db.like.delete({
       where: {
         userNo_tweetNo: {
-          userNo: session.user.id,
+          userNo: Number(session.user.id),
           tweetNo: Number(tweetId),
         },
       },
@@ -25,7 +25,7 @@ export async function likeTweet(tweetId: string): Promise<{ liked: boolean }> {
     await db.like.create({
       data: {
         tweetNo: Number(tweetId),
-        userNo: session.user.id,
+        userNo: Number(session.user.id),
       },
     })
     return { liked: true }
@@ -44,7 +44,7 @@ export async function respondToTweet({ tweetId, text }: RespondToTweetInput): Pr
   const response = await db.response.create({
     data: {
       response_txt: text,  // 'text' -> 'response_txt'로 수정
-      userNo: session.user.id,
+      userNo: Number(session.user.id),
       tweetNo: Number(tweetId),
     },
   })
@@ -62,7 +62,7 @@ export async function createTweet({ tweet }: CreateTweetInput): Promise<Tweet> {
   return await db.tweet.create({
     data: {
       tweet, // 'content' -> 'tweet'로 변경
-      userNo: session.user.id,
+      userNo: Number(session.user.id),
     },
   })
 }
