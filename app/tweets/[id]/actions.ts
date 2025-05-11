@@ -133,7 +133,7 @@ export async function addResponse({
         response_txt: result.data.response, // ✅ 수정됨
         user: {
           connect: {
-            user_no: session.user.id,
+            user_no: Number(session.user.id),
           },
         },
         tweet: {
@@ -218,7 +218,7 @@ export async function likeTweet(tweetId: number) {
     await db.like.create({
       data: {
         tweetNo: tweetId,      // ✅ 필드명 정확히
-        userNo: session.user.id,    // ✅ 필드명 정확히
+        userNo: Number(session.user.id),    // ✅ 필드명 정확히
       },
     });
     revalidateTag(`like-status-${tweetId}`);
@@ -237,7 +237,7 @@ export async function dislikeTweet(tweetId: number) {
     await db.like.delete({
       where: {
         userNo_tweetNo: {
-          userNo: session.user.id!,
+          userNo: Number(session.user.id!),
           tweetNo: tweetId,
         },
       }
