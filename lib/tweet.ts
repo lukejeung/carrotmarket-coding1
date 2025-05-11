@@ -38,7 +38,6 @@ export async function respondToTweet(tweetId: string, text: string): Promise<Res
 
   const response = await db.response.create({
     data: {
-      text,
       userNo: session.user.id,
       tweetNo: Number(tweetId),
     },
