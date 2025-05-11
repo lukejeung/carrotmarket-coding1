@@ -86,14 +86,12 @@ const formSchema = z
     path: ["confirm_password"],
   });
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function createAccount(
-  formData: FormData
-): Promise<CreateAccountState | void> {
+export async function createAccount(formData: FormData): Promise<CreateAccountState> {
   const data = {
-    username: formData.get("username")?.toString() || "",
-    email: formData.get("email")?.toString() || "",
-    password: formData.get("password")?.toString() || "",
-    confirm_password: formData.get("confirm_password")?.toString() || "",
+    username: formData.get("username"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+    confirm_password: formData.get("confirm_password"),
   };
 
   const result = await formSchema.spa(data);
@@ -103,29 +101,31 @@ export async function createAccount(
       ...data,
       errors: result.error.flatten().fieldErrors,
     };
-  } else {
-    const hashedPassword = await bcrypt.hash(result.data.password, 12);
-    const user = await db.user.create({
-      data: {
-        username: result.data.username,
-        email: result.data.email,
-        password: hashedPassword,
-        bio: "",
-      },
-      select: {
-        user_no: true,
-      },
-    });
-    const session = await getSession();
-    if (!session) {
-      return {
-        ...data,
-        error: "세션을 가져올 수 없습니다. 다시 로그인해주세요.",
-      };
-    }
-    session.user.id = user.user_no; // 문자열 변환 필요
-    // session.save(); // 세션 저장 필요 시 사용
-    redirect("/profile");
   }
+
+  const hashedPassword = await bcrypt.hash(result.data.password, 12);
+  const user = await db.user.create({
+    data: {
+      username: result.data.username,
+      email: result.data.email,
+      password: hashedPassword,
+      bio: "",
+    },
+    select: {
+      user_no: true,
+    },
+  });
+
+  const session = await getSession();
+  if (!session) {
+    return { error: "세션을 가져올 수 없습니다. 다시 로그인해주세요." };
+  }
+
+  session.user.id = String(user.user_no);
+  redirect("/profile");
+
+  // 👇 명시적으로 무언가 반환해야 에러 방지됨
+  return {};
 }
+
 
