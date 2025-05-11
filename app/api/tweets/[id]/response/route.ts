@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { respondToTweet } from "@/lib/tweet";
 
-export async function POST(req: NextRequest, context) {
+export async function POST(req: NextRequest, context: { params: { id: string } }) {
   const tweetId = context.params.id;
   const { content } = await req.json();
 
