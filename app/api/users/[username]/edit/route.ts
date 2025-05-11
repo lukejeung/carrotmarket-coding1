@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { updateProfile } from "@/lib/user";
 import type { NextRequest } from "next/server";
 
-export async function POST(req: NextRequest, { params }: { params: { username: string } }) {
+export async function POST(req: NextRequest) {
   
   if (!username) {
     return NextResponse.json({ error: "유저 이름이 필요합니다." }, { status: 400 });
