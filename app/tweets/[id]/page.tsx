@@ -63,7 +63,7 @@ export default async function TweetDetail({
 
   const tweetDetail = await getTweetDetail(id);
   const { responses, user } = tweetDetail;
-  const username = await getUserName(String(session.user.id));
+  const username = await getUserName(Number(session.user.id));
   const likeStatus = await getCachedLikeStatus(Number(id));
 if (!likeStatus) {
   return <div>좋아요 상태를 불러올 수 없습니다.</div>;
