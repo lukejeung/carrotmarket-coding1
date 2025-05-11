@@ -4,9 +4,9 @@ import type { NextRequest } from "next/server";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
-  const tweetId = params.id;
+  const { id } = await context.params;
 
   if (!tweetId) {
     return NextResponse.json({ error: "트윗 ID가 필요합니다." }, { status: 400 });
