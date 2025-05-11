@@ -34,7 +34,7 @@ export async function likeTweet(tweetId: string): Promise<{ liked: boolean }> {
 
 interface RespondToTweetInput {
   tweetId: string;
-  text: string;
+  text: string;  // 'text' -> 'response_txt'로 변경
 }
 
 export async function respondToTweet({ tweetId, text }: RespondToTweetInput): Promise<Response> {
@@ -43,7 +43,7 @@ export async function respondToTweet({ tweetId, text }: RespondToTweetInput): Pr
 
   const response = await db.response.create({
     data: {
-      text, // text를 포함하여 데이터에 추가
+      response_txt: text,  // 'text' -> 'response_txt'로 수정
       userNo: session.user.id,
       tweetNo: Number(tweetId),
     },
@@ -67,4 +67,3 @@ export async function createTweet({ content }: CreateTweetInput): Promise<Tweet>
     },
   })
 }
-
