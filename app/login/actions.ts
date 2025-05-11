@@ -8,9 +8,9 @@ import {
   PASSWORD_REGEX,
   PASSWORD_REGEX_ERROR,
 } from "@/lib/constants";
-import db from "@/lib/db";
+import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
-import getSession from "@/lib/session";
+import { getSession } from "@/lib/session";
 
 interface LoginResponse {
   email: FormDataEntryValue | null;
