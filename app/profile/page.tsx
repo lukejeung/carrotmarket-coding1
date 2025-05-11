@@ -1,5 +1,5 @@
-import db from "@/lib/db";
-import getSession from "@/lib/session";
+import { db } from "@/lib/db";
+import { getSession } from "@/lib/session";
 import { notFound, redirect } from "next/navigation";
 import Profile from "@/components/profile";
 
