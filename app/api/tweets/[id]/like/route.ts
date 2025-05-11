@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 import { likeTweet } from "@/lib/tweet";
 import type { NextRequest } from "next/server";
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   const tweetId = params.id;
 
   if (!tweetId) {
