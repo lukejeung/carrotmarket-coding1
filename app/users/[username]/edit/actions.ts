@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcrypt";
-import db from "@/lib/db";
+import { db } from "@/lib/db";
 import { z } from "zod";
 import {
   PASSWORD_MIN_LENGTH,
