@@ -73,7 +73,6 @@ const formSchema = z
   });
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function createAccount(
-  prevState: any,
   formData: FormData
 ): Promise<CreateAccountState | void> {
   const data = {
