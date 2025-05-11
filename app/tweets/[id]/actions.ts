@@ -231,6 +231,9 @@ export async function dislikeTweet(tweetId: number) {
   await new Promise((r) => setTimeout(r, 1000));
   try {
     const session = await getSession();
+    if (!session) {
+  return { error: "세션을 가져올 수 없습니다. 다시 로그인해주세요." };
+}
     await db.like.delete({
       where: {
         userNo_tweetNo: {
