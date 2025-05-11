@@ -118,7 +118,7 @@ export async function createAccount(formData: FormData): Promise<CreateAccountSt
 
   const session = await getSession();
   if (!session) {
-    return { error: "세션을 가져올 수 없습니다. 다시 로그인해주세요." };
+    return { errors: "세션을 가져올 수 없습니다. 다시 로그인해주세요." };
   }
 
   session.user.id = user.user_no;
