@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import TweetCard from "@/components/tweet-card";
 import BackButton from "@/app/components/back-button";
 import { revalidatePath } from "next/cache";
-import getSession from "@/lib/session";
+import { getSession } from "@/lib/session";
 import Link from "next/link";
 
 export default async function UserProfilePage({
