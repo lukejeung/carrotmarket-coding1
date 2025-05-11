@@ -8,7 +8,7 @@ async function getUser() {
   if (session && session.user.id) {
     const user = await db.user.findUnique({
       where: {
-        user_no: session.id,
+        user_no: session.user.id,
       },
     });
     if (user) {
@@ -23,7 +23,6 @@ export default async function ProfilePage() {
   const logOut = async () => {
     "use server";
     const session = await getSession();
-    session.destroy();
     redirect("/");
   };
   return <Profile user={user} logOut={logOut} enableEdit={false} />;
