@@ -94,7 +94,7 @@ export async function logIn(
       if (!session) {
   return { error: "세션을 가져올 수 없습니다. 다시 로그인해주세요." };
 }
-      session.user.id = user!.user_no;
+      session.user.id = String(user!.user_no);
       redirect("/");
     } else {
       return {
