@@ -32,7 +32,7 @@ export async function likeTweet(tweetId: string): Promise<{ liked: boolean }> {
   }
 }
 
-export async function respondToTweet(tweetId: string, text: string): Promise<Response> {
+export async function respondToTweet(tweetId: string): Promise<Response> {
   const session = await getServerSession(authOptions)
   if (!session?.user?.id) throw new Error('로그인 상태가 아닙니다.')
 
