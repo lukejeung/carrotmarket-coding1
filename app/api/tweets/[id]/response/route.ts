@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
   const { content } = await req.json();
 
   try {
-    const response = await respondToTweet(tweetId, content);
+    const response = await respondToTweet({ tweetId, text: content });
     return NextResponse.json(response);
   } catch (error) {
     console.error("Respond To Tweet Error:", error);
