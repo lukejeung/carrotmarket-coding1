@@ -24,7 +24,7 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id as string
+        session.user.id = Number(token.id);
         session.user.username = token.username as string
       }
       return session
