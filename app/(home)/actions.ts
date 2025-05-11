@@ -84,9 +84,4 @@ export async function createTweet(prevState: any, formData: FormData) {
     }
   }
   return { error: "로그인이 필요합니다" };
-} else {
-  // session이 없을 때 처리 (선택)
-  return {
-    error: "로그인이 필요합니다.",
-  };
 }
