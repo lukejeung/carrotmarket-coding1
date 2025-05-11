@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 로컬설정 > migrations 폴더 제거 > npx prisma migrate dev --create-only
+// datasource db {
+//   provider = "sqlite"
+//   url      = env("DATABASE_URL")
+// }
+
+// 클라우드설정 > migrations 폴더 제거 > npx prisma migrate dev --create-only
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model User {
+  user_no    Int        @id @unique @default(autoincrement())
+  email      String     @unique
+  username   String     @unique
+  password   String
+  bio        String
+  created_dt DateTime   @default(now())
+  updated_dt DateTime   @updatedAt
+  Tweet      Tweet[]
+  Like       Like[]
+  Comment    Comment[]
+  Response   Response[]
+}
+
+model Tweet {
+  tweet_no   Int        @id @unique @default(autoincrement())
+  tweet      String
+  created_at DateTime   @default(now())
+  updated_at DateTime   @updatedAt
+  user       User       @relation(fields: [userNo], references: [user_no], onDelete: Cascade)
+  userNo     Int
+  Like       Like[]
+  Comment    Comment[]
+  responses  Response[]
+}
+
+model Like {
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user       User     @relation(fields: [userNo], references: [user_no], onDelete: Cascade)
+  userNo     Int
+  tweet      Tweet    @relation(fields: [tweetNo], references: [tweet_no], onDelete: Cascade)
+  tweetNo    Int
+
+  @@id(name: "id", fields: [userNo, tweetNo])
+  @@unique([userNo, tweetNo], name: "userNo_tweetNo")
+}
+
+// 댓글 :: Tweet, User 연결
+model Comment {
+  id         Int      @id @default(autoincrement())
+  payload    String // 댓글 내용
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  tweet      Tweet    @relation(fields: [tweetNo], references: [tweet_no], onDelete: Cascade)
+  tweetNo    Int
+  user       User     @relation(fields: [userNo], references: [user_no], onDelete: Cascade)
+  userNo     Int
+}
+
+model Response {
+  id           Int      @id @default(autoincrement())
+  response_txt String
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+  user         User     @relation(fields: [userNo], references: [user_no], onDelete: Cascade)
+  userNo       Int
+  tweet        Tweet    @relation(fields: [tweetNo], references: [tweet_no], onDelete: Cascade)
+  tweetNo      Int
+}
