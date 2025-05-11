@@ -1,7 +1,5 @@
 import { db } from './db'
 import { compare, hash } from 'bcrypt'
-import { getServerSession } from 'next-auth'
-import { authOptions } from './session'
 
 interface LoginInput {
   email: string
