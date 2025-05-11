@@ -36,7 +36,7 @@ async function getCachedLikeStatus(tweetId: number) {
   const cachedOperation = nextCache(getLikeStatus, ["tweet-like-status"], {
     tags: [`like-status-${tweetId}`],
   });
-  return cachedOperation(tweetId, userId!);
+  return cachedOperation(Number(tweetId), userId!);
 }
 
 // 새로고침 동작
