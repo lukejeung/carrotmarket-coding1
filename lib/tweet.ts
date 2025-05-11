@@ -53,16 +53,15 @@ export async function respondToTweet({ tweetId, text }: RespondToTweetInput): Pr
 }
 
 interface CreateTweetInput {
-  content: string
+  tweet: string // 'content' -> 'tweet'로 변경
 }
-
-export async function createTweet({ content }: CreateTweetInput): Promise<Tweet> {
+export async function createTweet({ tweet }: CreateTweetInput): Promise<Tweet> {
   const session = await getServerSession(authOptions)
   if (!session?.user?.id) throw new Error('로그인 상태가 아닙니다.')
 
   return await db.tweet.create({
     data: {
-      content,
+      tweet, // 'content' -> 'tweet'로 변경
       userNo: session.user.id,
     },
   })
