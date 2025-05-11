@@ -3,17 +3,17 @@ import { likeTweet } from "@/lib/tweet";
 import type { NextRequest } from "next/server";
 
 export async function POST(
-  req: NextRequest,
-  _context: { params: Promise<{ id: string }> }
+  _: NextRequest,
+  context: { params: Promise<{ id: string }> }
 ) {
-  const { tweetId } = await context.params;
+  const { id } = await context.params;
 
-  if (!tweetId) {
+  if (!id) {
     return NextResponse.json({ error: "트윗 ID가 필요합니다." }, { status: 400 });
   }
 
   try {
-    const result = await likeTweet(tweetId);
+    const result = await likeTweet(id);
     return NextResponse.json(result);
   } catch (error) {
     console.error("Like Tweet Error:", error);
