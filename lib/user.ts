@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/session";
 
 export async function updateProfile(username: string, data: { bio?: string; name?: string }) {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.username || session.user.username !== username) {
+  if (!session?.user?.name || session.user.name !== username) {
     throw new Error("권한이 없습니다.");
   }
 
