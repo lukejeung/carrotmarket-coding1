@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { updateUserProfile } from "@/lib/user";
+import { updateProfile } from "@/lib/user";
 
 export async function POST(req: NextRequest) {
   // URL에서 username 추출
