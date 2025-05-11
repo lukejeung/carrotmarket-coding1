@@ -30,7 +30,9 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.id = Number(user.id);
-        token.username = user.username
+        if ("username" in user) {
+    token.username = (user as AdapterUser).username; // AdapterUser 타입으로 강제 변환
+  }
       }
       return token
     },
