@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { updateProfile } from "@/lib/user";
 import type { NextRequest } from "next/server";
 
-export async function POST(req: NextRequest, context) {
+export async function POST(req: NextRequest, context: { params: { username: string } }) {
   const username = context.params.username;
 
   if (!username) {
