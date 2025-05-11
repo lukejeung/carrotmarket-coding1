@@ -12,7 +12,14 @@ export async function likeTweet(tweetId: string): Promise<{ liked: boolean }> {
   })
 
   if (existing) {
-    await db.like.delete({ where: { id: existing.id } })
+    await db.like.delete({
+  where: {
+    userNo_tweetNo: {
+      userNo: session.user.id,
+      tweetNo: Number(tweetId),
+    },
+  },
+})
     return { liked: false }
   } else {
     await db.like.create({
