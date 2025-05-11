@@ -63,7 +63,7 @@ export default async function TweetDetail({
 
   const tweetDetail = await getTweetDetail(id);
   const { responses, user } = tweetDetail;
-  const username = await getUserName(session.id);
+  const username = await getUserName(session.user.id);
   const { likeCount, isLiked } = await getCachedLikeStatus(Number(id));
 
   const handleRevalidate = async () => {
