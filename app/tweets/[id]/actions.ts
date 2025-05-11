@@ -237,7 +237,7 @@ export async function dislikeTweet(tweetId: number) {
     await db.like.delete({
       where: {
         userNo_tweetNo: {
-          userNo: session.id!,
+          userNo: session.user.id!,
           tweetNo: tweetId,
         },
       }
