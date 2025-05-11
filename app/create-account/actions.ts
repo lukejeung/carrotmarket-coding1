@@ -123,7 +123,7 @@ export async function createAccount(
         error: "세션을 가져올 수 없습니다. 다시 로그인해주세요.",
       };
     }
-    session.user.id = String(user.user_no); // 문자열 변환 필요
+    session.user.id = user.user_no; // 문자열 변환 필요
     // session.save(); // 세션 저장 필요 시 사용
     redirect("/profile");
   }
