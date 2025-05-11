@@ -91,6 +91,9 @@ export async function logIn(
     );
     if (ok) {
       const session = await getSession();
+      if (!session) {
+  return { error: "세션을 가져올 수 없습니다. 다시 로그인해주세요." };
+}
       session.id = user!.user_no;
       await session.save();
       redirect("/");
