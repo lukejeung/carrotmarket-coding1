@@ -78,7 +78,7 @@ export async function createResponse(tweetId: number, content: string) {
   }
 
   const session = await getSession();
-  if (!session.id) {
+  if (!session || !session.user.id) {
     return {
       error: "로그인이 필요합니다",
     };
@@ -89,7 +89,7 @@ export async function createResponse(tweetId: number, content: string) {
       response_txt: content,
       user: {
         connect: {
-          user_no: session.id,
+          user_no: session.user.id,
         },
       },
       tweet: {
@@ -133,7 +133,7 @@ export async function addResponse({
         response_txt: result.data.response, // ✅ 수정됨
         user: {
           connect: {
-            user_no: session.id,
+            user_no: session.user.id,
           },
         },
         tweet: {
@@ -211,14 +211,14 @@ export async function getMoreResponses(tweetId: number, cursorId: number) {
 export async function likeTweet(tweetId: number) {
   await new Promise((r) => setTimeout(r, 1000));
   const session = await getSession();
-  if (!session.id) {
+  if (!session || !session.user.id) {
     throw new Error("로그인이 필요합니다.");
   }
   try {
     await db.like.create({
       data: {
         tweetNo: tweetId,      // ✅ 필드명 정확히
-        userNo: session.id,    // ✅ 필드명 정확히
+        userNo: session.user.id,    // ✅ 필드명 정확히
       },
     });
     revalidateTag(`like-status-${tweetId}`);
