@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
   const { bio, name } = await req.json();
 
   try {
-    const result = await updateUserProfile(username, { bio, name });
+    const result = await updateProfile(username, { bio, name });
     return NextResponse.json(result);
   } catch (error) {
     console.error("Update Profile Error:", error);
