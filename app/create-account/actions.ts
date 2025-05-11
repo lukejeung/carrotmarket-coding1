@@ -72,12 +72,15 @@ const formSchema = z
     path: ["confirm_password"],
   });
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function createAccount(prevState: any, formData: FormData) {
+export async function createAccount(
+  prevState: any,
+  formData: FormData
+): Promise<CreateAccountState | void> {
   const data = {
-    username: formData.get("username"),
-    email: formData.get("email"),
-    password: formData.get("password"),
-    confirm_password: formData.get("confirm_password"),
+    username: formData.get("username")?.toString() || "",
+    email: formData.get("email")?.toString() || "",
+    password: formData.get("password")?.toString() || "",
+    confirm_password: formData.get("confirm_password")?.toString() || "",
   };
 
   const result = await formSchema.spa(data);
@@ -102,9 +105,14 @@ export async function createAccount(prevState: any, formData: FormData) {
     });
     const session = await getSession();
     if (!session) {
-  return { error: "세션을 가져올 수 없습니다. 다시 로그인해주세요." };
-}
-    session.user.id = user.user_no;
+      return {
+        ...data,
+        error: "세션을 가져올 수 없습니다. 다시 로그인해주세요.",
+      };
+    }
+    session.user.id = String(user.user_no); // 문자열 변환 필요
+    // session.save(); // 세션 저장 필요 시 사용
     redirect("/profile");
   }
 }
+
